@@ -281,15 +281,51 @@ void merge () {
     printList(); // 출력 합수 호출 
 }
 
+void MinHeap_Insert(int h[], int item, int heap_index){ // 아이템을 최소힙트리에 삽입
+    int i = heap_index;
+    while((i!=1) && (item<h[i/2])){ // i가 루트노트를 가리키지 않고 item 값이 부모값보다 작을경우 참
+        h[i]=h[i/2]; // 부모 값을 자식으로 옮김.
+        i/=2;
+    }
+    h[i]=item; // 최소 힙 트리에 item삽입
+}
+
+int MinHeap_Delete(int h[], int heap_index){
+    int parent, child, item, temp;
+    item = h[1]; // 삭제할 item
+    temp = h[heap_index]; // 마지막 원소 값을 temp에 저장
+    parent = 1;
+    child = 2;
+    while(child<=heap_index){
+        if((child<heap_index) && (h[child] > h[child+1])){ // 자식 중 더 작은 값 선택
+            child++;
+        }
+        if(temp<=h[child]){
+            break;
+        }
+        h[parent]=h[child]; // 자식 값을 부모에 삽입
+        parent=child; // parent를 아래 단계로 이동
+        child*=2; // child를 아래 단계로 이동
+    }
+    h[parent]=temp;
+    return item;
+}
+
 void MinHeapSort () { //내림차순
-    printf("<힙 정렬>\n");
-    randomNumber(); // 난수 리스트 함수
-    
+    int h[MAX_SIZE] = {0}, heap_index = 0;
+    for(int i=0;i<MAX_SIZE;i++){ // 최소 힙 생성
+		heap_index++;
+        MinHeap_Insert(h, List_after_sorting2[i], heap_index); // 아이템 삽입 함수 호출
+	}
+    for(int i=MAX_SIZE-1;i>=0;i--){ 
+        List_after_sorting2[i]=MinHeap_Delete(h, heap_index); // 아이템 삭제 함수 호출
+        heap_index--;
+	}
 }
 
 void MaxHeap_Insert(int h[], int item, int heap_index){ // 아이템을 최대힙트리에 삽입
     int i = heap_index;
-    while((i!=1) && (item>h[i/2])){ // 공백트리가 아니고 item 값이 부모값보다 클경우 참
+    while((i!=1) && (item>h[i/2])){ // i가 루트노트를 가리키지 않고 item 값이 부모값보다 클경우 참
         h[i]=h[i/2]; // 부모 값을 자식으로 옮김.
         i/=2;
     }
@@ -303,29 +339,27 @@ int MaxHeap_Delete(int h[], int heap_index){
     parent = 1;
     child = 2;
     while(child<=heap_index){
-        if((child<heap_index) && (h[child] < h[child+1])){
-            child++; // 자식 중 더 큰 값 선택
+        if((child<heap_index) && (h[child] < h[child+1])){ // 자식 중 더 큰 값 선택
+            child++; 
         }
         if(temp>=h[child]){
             break;
         }
-        h[parent]=h[child]; // 자식 값을 부모로
-        parent=child; // 아래 단계로 이동
-        child*=2; // 아래 단계로 이동
+        h[parent]=h[child]; // 자식 값을 부모에 삽입
+        parent=child; // parent를 아래 단계로 이동
+        child*=2; // child를 아래 단계로 이동
     }
     h[parent]=temp;
     return item;
 }
 
 void MaxHeapSort () { //오름차순
-    printf("<힙 정렬>\n");
-    randomNumber(); // 난수 리스트 함수
     int h[MAX_SIZE] = {0}, heap_index = 0;
     for(int i=0;i<MAX_SIZE;i++){ // 최대 힙 생성
 		heap_index++;
         MaxHeap_Insert(h, List_after_sorting[i], heap_index); // 아이템 삽입 함수 호출
 	}
-    for(int i=MAX_SIZE-1;i>=0;i--){ // 최대 힙 생성
+    for(int i=MAX_SIZE-1;i>=0;i--){ 
         List_after_sorting[i]=MaxHeap_Delete(h, heap_index); // 아이템 삭제 함수 호출
         heap_index--;
 	}
@@ -333,9 +367,9 @@ void MaxHeapSort () { //오름차순
 
 void heapSort () { //오름차순
     printf("<힙 정렬>\n");
-    randomNumber(); // 난수 리스트 함수
-    MaxHeapSort(); // 오름차순
-    // MinHeapSort(); //내림차순
+    randomNumber(); // 난수 리스트 함수 
+    MaxHeapSort(); // 오름차순 (최대힙)
+    MinHeapSort(); //내림차순 (최소힙)
     printList(); // 출력 합수 호출
 }
 
