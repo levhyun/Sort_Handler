@@ -10,33 +10,33 @@ int List_after_sorting2[MAX_SIZE]; // 정렬 후 리스트 (내림차순)
 int List_before_sorting[MAX_SIZE]; // 정렬 전 리스트
 
 void initializeList () { // 리스트 초기화
-    for(int i = 0; i < MAX_SIZE; i++){
-        List_after_sorting[i] = 0;
-        List_after_sorting2[i] = 0;
-        List_before_sorting[i] = 0;  
+    for(int i = 0; i < MAX_SIZE; i++){ // 0부터 24까지 반복
+        List_after_sorting[i] = 0; // i번째 값 0으로 초기화
+        List_after_sorting2[i] = 0; // i번째 값 0으로 초기화
+        List_before_sorting[i] = 0; // i번째 값 0으로 초기화
     }
 }
 
 void printList () { // 리스트 출력
     printf("정렬 전 : ");
-    for(int i = 0; i < MAX_SIZE; i++){
-        printf("%d ", List_before_sorting[i]); // 정렬 전 리스트
+    for(int i = 0; i < MAX_SIZE; i++){ // 0부터 24까지 반복
+        printf("%d ", List_before_sorting[i]); // 정렬 전 리스트 출력
     }
     printf("\n정렬 후[오름차순] : "); 
-    for(int i = 0; i < MAX_SIZE; i++){
-        printf("%d ", List_after_sorting[i]); // 정렬 후 리스트 (오름차순)
+    for(int i = 0; i < MAX_SIZE; i++){ // 0부터 24까지 반복
+        printf("%d ", List_after_sorting[i]); // 정렬 후 리스트 (오름차순) 출력
     }
     printf("\n정렬 후[내림차순] : ");
-    for(int i = 0; i < MAX_SIZE; i++){
-        printf("%d ", List_after_sorting2[i]); // 정렬 후 리스트 (내림차순)
+    for(int i = 0; i < MAX_SIZE; i++){ // 0부터 24까지 반복
+        printf("%d ", List_after_sorting2[i]); // 정렬 후 리스트 (내림차순) 출력
     }
     printf("\n\n");
 }
 
 void randomNumber () { // 난수 삽입
-    srand((unsigned int)time(NULL));
-	for (int i = 0; i < MAX_SIZE; i++) { // 25번 반복
-        List_after_sorting[i] = rand()%101; // 난수 생성
+    srand((unsigned int)time(NULL)); // 실행될때마다 같은수가 나오는것을 방지
+	for (int i = 0; i < MAX_SIZE; i++) { // 0부터 24까지 반복
+        List_after_sorting[i] = rand()%101; // 0~100 범위의 난수 생성후 리스트에 삽입
         List_after_sorting2[i] = List_after_sorting[i]; // 복사
         List_before_sorting[i] = List_after_sorting[i]; // 복사
     }
@@ -45,11 +45,16 @@ void randomNumber () { // 난수 삽입
 void selection () {
     printf("<선택 정렬>\n");
     randomNumber(); // 난수 리스트 함수
-    int temp;
+    int temp; 
     //오름차순
-    for(int i = 0; i < MAX_SIZE; i++){
-        for(int j = i+1; j < MAX_SIZE; j++){
-            if(List_after_sorting[i]>List_after_sorting[j]) {
+    for(int i = 0; i < MAX_SIZE; i++){ // 0부터 24까지 반복
+        for(int j = i+1; j < MAX_SIZE; j++){  // i+1부터 24까지 반복
+            if(List_after_sorting[i]>List_after_sorting[j]) { //만약 i번째 값이 j번째 값보다 클경우 참이 성립
+                /*  
+                    만약 i번째 값이 j번째 값보다 클경우 
+                    오름차순이므로 큰값일수록 뒤에 있어야 하기에 
+                    i번째 값과 j번째 값의 위치를 바꾼다.
+                */
                 temp = List_after_sorting[i];
                 List_after_sorting[i] = List_after_sorting[j];
                 List_after_sorting[j] = temp;   
@@ -57,9 +62,14 @@ void selection () {
         }
     }
     //내림차순
-    for(int i = 0; i < MAX_SIZE-1; i++){
-        for(int j = i+1; j < MAX_SIZE; j++){
-            if(List_after_sorting2[i]<List_after_sorting2[j]){
+    for(int i = 0; i < MAX_SIZE-1; i++){ // 0부터 24까지 반복
+        for(int j = i+1; j < MAX_SIZE; j++){ // i+1부터 24까지 반복
+            if(List_after_sorting2[i]<List_after_sorting2[j]){ //만약 i번째 값이 j번째 값보다 작을경우 참이 성립
+                /*  
+                    만약 i번째 값이 j번째 값보다 클경우 
+                    내임차순이므로 작은값일수록 앞에 있어야 하기에 
+                    i번째 값과 j번째 값의 위치를 바꾼다.
+                */
                 temp = List_after_sorting2[j];
                 List_after_sorting2[j] = List_after_sorting2[i];
                 List_after_sorting2[i] = temp;
@@ -71,35 +81,40 @@ void selection () {
 
 void insertion () {
     printf("<삽입 정렬>\n");
-    randomNumber();
+    randomNumber(); // 난수 리스트 함수
     int i, j, key;
     //오름차순
-    for(i=1; i<MAX_SIZE; i++){
+    for( i=1; i<MAX_SIZE; i++){ // 1부터 24까지 반복
         key = List_after_sorting[i]; // 삽입될 숫자인 i번째 정수를 key에 복사
-        for(j=i-1; j>=0 && List_after_sorting[j]>key; j--){
+        for( j=i-1; j>=0 && List_after_sorting[j]>key; j--){ 
+            // i-1부터 j는 0보다 크거나 같을때 까지 반복
+            // j번째 값이 key보다 클 경우 반복문 안 명령어 실행.
             List_after_sorting[j+1] = List_after_sorting[j]; // 레코드(구조체) 오른쪽으로 이동
         }
-        List_after_sorting[j+1] = key; 
+        List_after_sorting[j+1] = key; // 삽입
     }
     //내림차순
-    for(i=1; i<MAX_SIZE; i++){
+    for( i=1; i<MAX_SIZE; i++){
         key = List_after_sorting2[i]; // 삽입될 숫자인 i번째 정수를 key에 복사
-        for(j=i-1; j>=0 && List_after_sorting2[j]<key; j--){
+        for( j=i-1; j>=0 && List_after_sorting2[j]<key; j--){
+            // i-1부터 j는 0보다 크거나 같을때 까지 반복
+            // j번째 값이 key보다 작을 경우 반복문 안 명령어 실행.
             List_after_sorting2[j+1] = List_after_sorting2[j]; // 레코드(구조체) 오른쪽으로 이동
         }
-        List_after_sorting2[j+1] = key;
+        List_after_sorting2[j+1] = key; // 삽입
     }
     printList(); // 출력 합수 호출
 }
 
 void bubble () {
     printf("<버블 정렬>\n");
-    randomNumber();
+    randomNumber(); // 난수 리스트 함수
     int temp;
     //오름차순
-    for(int i = 0; i < MAX_SIZE; i++){
-        for(int j = 0; j < MAX_SIZE-1-i; j++){
-            if (List_after_sorting[j] > List_after_sorting[j + 1]) {
+    for(int i = 0; i < MAX_SIZE; i++){ // 0부터 24까지 반복
+        for(int j = 0; j < MAX_SIZE-1-i; j++){ // 0부터 23-i까지 반복
+            if (List_after_sorting[j] > List_after_sorting[j + 1]) { 
+                // j번째 값이 다음칸의 값보다 클경우 참이 되어 위치를 바꾼다
                 temp = List_after_sorting[j];
                 List_after_sorting[j] = List_after_sorting[j + 1];
                 List_after_sorting[j + 1] = temp;
@@ -107,9 +122,10 @@ void bubble () {
         }
     }
     //내림차순
-    for(int i = 0; i < MAX_SIZE; i++){
-        for(int j = 0; j < MAX_SIZE-1-i; j++){
+    for(int i = 0; i < MAX_SIZE; i++){ // 0부터 24까지 반복
+        for(int j = 0; j < MAX_SIZE-1-i; j++){ // 0부터 23-i까지 반복
             if (List_after_sorting2[j] < List_after_sorting2[j + 1]) {
+                // j번째 값이 다음칸의 값보다 작을 경우 참이 되어 위치를 바꾼다
                 temp = List_after_sorting2[j];
                 List_after_sorting2[j] = List_after_sorting2[j + 1];
                 List_after_sorting2[j + 1] = temp;
@@ -154,10 +170,10 @@ void quickSort2(int L, int R){
     int pivot = List_after_sorting2[(L + R) / 2]; //pivot을 가운데 설정
     int temp;
     do{
-        while (List_after_sorting2[left] > pivot){ //left가 pivot보다 큰 값을 만나거나 pivot을 만날 때까지 
+        while (List_after_sorting2[left] > pivot){ //left가 pivot보다 작은 값을 만나거나 pivot을 만날 때까지 
             left++;
         }
-        while (List_after_sorting2[right] < pivot){ //right가 pivot보다 작은 값을 만나거나 pivot을 만날 때까지 
+        while (List_after_sorting2[right] < pivot){ //right가 pivot보다 큰 값을 만나거나 pivot을 만날 때까지 
             right--;
         }
         if (left<= right){ //left가 right보다 왼쪽에 있다면 교환
@@ -179,9 +195,9 @@ void quickSort2(int L, int R){
 
 void quick () {
     printf("<퀵 정렬>\n");
-    randomNumber();
-    quickSort1(0, MAX_SIZE-1); //오름차순
-    quickSort2(0, MAX_SIZE-1); //내림차순
+    randomNumber(); // 난수 리스트 함수
+    quickSort1(0, MAX_SIZE-1); //오름차순 (정렬할 범위의 값을 매개변수로 보낸다)
+    quickSort2(0, MAX_SIZE-1); //내림차순 (정렬할 범위의 값을 매개변수로 보낸다)
     printList(); // 출력 합수 호출
 }
 
@@ -241,8 +257,8 @@ void mergeSort1(int low, int hight){ //합병정렬 - 오름차순
     int mid;
 	if(low < hight){
 		mid = (low + hight) / 2;
-		mergeSort1(low, mid); //왼쪽 리스트
-		mergeSort1(mid + 1, hight); //오른쪽 리스트
+		mergeSort1(low, mid); // mid왼쪽 리스트
+		mergeSort1(mid + 1, hight); // mid오른쪽 리스트
 		mergeSort1_1(low, mid, hight); //분리된 리스트 정렬 함수
 	}
 }
@@ -251,77 +267,75 @@ void mergeSort2(int low, int hight){ //합병정렬 - 내림차순
     int mid;
 	if(low < hight){
 		mid = (low + hight) / 2;
-		mergeSort2(low, mid); //왼쪽 리스트
-		mergeSort2(mid + 1, hight); //오른쪽 리스트
+		mergeSort2(low, mid); // mid왼쪽 리스트
+		mergeSort2(mid + 1, hight); // mid오른쪽 리스트
 		mergeSort2_2(low, mid, hight); //분리된 리스트 정렬 함수
 	}
 }
 
 void merge () {
     printf("<합병 정렬>\n");
-    randomNumber();
-    mergeSort1(0, MAX_SIZE-1); //오름차순
-    mergeSort2(0, MAX_SIZE-1); //내림차순
-    printList(); // 출력 합수 호출
-}
- 
-void heapify1(int size1){ //힙 상태 만들기 (오름차순)
-	for(int i=1;i<size1;++i){
-		int child = i;
-		do{
-			int root = (child-1)/2;
-			if(List_after_sorting[root]<List_after_sorting[child]){ //자식 노드가 부모 노드보다 크면 교환
-				int temp = List_after_sorting[root];
-				List_after_sorting[root] = List_after_sorting[child];
-				List_after_sorting[child] = temp;
-			}
-			child = root;
-		}while(child!=0); //최상단 노드까지 점검
-	}
+    randomNumber(); // 난수 리스트 함수
+    mergeSort1(0, MAX_SIZE-1); //오름차순 (정렬할 범위의 값을 매개변수로 보낸다)
+    mergeSort2(0, MAX_SIZE-1); //내림차순 (정렬할 범위의 값을 매개변수로 보낸다)
+    printList(); // 출력 합수 호출 
 }
 
-void heap1(int *size1){ //최상단 노드와 최하단 노드 교체 (오름차순)
-	int temp = List_after_sorting[0];
-	List_after_sorting[0] = List_after_sorting[*size1-1];
-	List_after_sorting[*size1-1] = temp;
-	--(*size1);
-}
-
-void heapify2(int size2){ //힙 상태 만들기 (내림차순)
-	for(int i=1;i<size2;++i){
-		int child = i;
-		do{
-			int root = (child-1)/2;
-			if(List_after_sorting2[root]>List_after_sorting2[child]){ //자식 노드가 부모 노드보다 크면 교환
-				int temp = List_after_sorting2[root];
-				List_after_sorting2[root] = List_after_sorting2[child];
-				List_after_sorting2[child] = temp;
-			}
-			child = root;
-		}while(child!=0); //최상단 노드까지 점검
-	}
-}
-
-void heap2(int *size2){ //최상단 노드와 최하단 노드 교체 (내림차순)
-	int temp = List_after_sorting2[0];
-	List_after_sorting2[0] = List_after_sorting2[*size2-1];
-	List_after_sorting2[*size2-1] = temp;
-	--(*size2);
-}
-
-void heapSort () {
+void MinHeapSort () { //내림차순
     printf("<힙 정렬>\n");
-    randomNumber();
-    int size1 = MAX_SIZE;
-    for(int i=0;i<MAX_SIZE;++i){ //오름차순
-		heapify1(size1); //힙상태 만드는 함수
-		heap1(&size1); 
+    randomNumber(); // 난수 리스트 함수
+    
+}
+
+void MaxHeap_Insert(int h[], int item, int heap_index){ // 아이템을 최대힙트리에 삽입
+    int i = heap_index;
+    while((i!=1) && (item>h[i/2])){ // 공백트리가 아니고 item 값이 부모값보다 클경우 참
+        h[i]=h[i/2]; // 부모 값을 자식으로 옮김.
+        i/=2;
+    }
+    h[i]=item; // 최대 힙 트리에 item삽입
+}
+
+int MaxHeap_Delete(int h[], int heap_index){
+    int parent, child, item, temp;
+    item = h[1]; // 삭제할 item
+    temp = h[heap_index]; // 마지막 원소 값을 temp에 저장
+    parent = 1;
+    child = 2;
+    while(child<=heap_index){
+        if((child<heap_index) && (h[child] < h[child+1])){
+            child++; // 자식 중 더 큰 값 선택
+        }
+        if(temp>=h[child]){
+            break;
+        }
+        h[parent]=h[child]; // 자식 값을 부모로
+        parent=child; // 아래 단계로 이동
+        child*=2; // 아래 단계로 이동
+    }
+    h[parent]=temp;
+    return item;
+}
+
+void MaxHeapSort () { //오름차순
+    printf("<힙 정렬>\n");
+    randomNumber(); // 난수 리스트 함수
+    int h[MAX_SIZE] = {0}, heap_index = 0;
+    for(int i=0;i<MAX_SIZE;i++){ // 최대 힙 생성
+		heap_index++;
+        MaxHeap_Insert(h, List_after_sorting[i], heap_index); // 아이템 삽입 함수 호출
 	}
-    int size2 = MAX_SIZE;
-    for(int i=0;i<MAX_SIZE;++i){ //내림차순
-		heapify2(size2); //힙상태 만드는 함수
-		heap2(&size2);
+    for(int i=MAX_SIZE-1;i>=0;i--){ // 최대 힙 생성
+        List_after_sorting[i]=MaxHeap_Delete(h, heap_index); // 아이템 삭제 함수 호출
+        heap_index--;
 	}
+}
+
+void heapSort () { //오름차순
+    printf("<힙 정렬>\n");
+    randomNumber(); // 난수 리스트 함수
+    MaxHeapSort(); // 오름차순
+    // MinHeapSort(); //내림차순
     printList(); // 출력 합수 호출
 }
 
@@ -355,7 +369,7 @@ void banner () {
 int main () {
     banner(); // 배너 함수 (Sort Handler)
     guide(); // 정렬 번호 보기
-    int Select_Features;
+    int Select_Features; // 정렬 구분 번호 입력될 변수
     while(1){
         printf("\n번호 입력 : ");
         scanf("%d", &Select_Features); // 번호 입력
@@ -384,8 +398,8 @@ int main () {
                 break;
             default:
                 printf("<번호 오류>");   
-                Sleep(1000);
-                system( "cls" );
+                Sleep(1000); // 1초 대기
+                system( "cls" ); // 실행창 지우기
                 guide(); // 정렬 번호 보기
                 break;
         }
